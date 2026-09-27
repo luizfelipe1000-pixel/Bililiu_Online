@@ -27,8 +27,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-stone-900 selection:bg-amber-200">
-      {/* Cabeçalho Fixo */}
+    <div className="min-h-screen flex flex-col bg-[#080d0a] text-stone-100 selection:bg-emerald-500 selection:text-black">
+      {/* Cabeçalho Fixo Futurista */}
       <Header
         onOpenPrivacy={() => setIsPrivacyOpen(true)}
         onScrollToChat={scrollToChat}
@@ -36,7 +36,7 @@ export default function App() {
 
       {/* Conteúdo Principal */}
       <main className="flex-1">
-        {/* Seção Hero */}
+        {/* Seção Hero com Caricatura e Tipografia Syne */}
         <Hero onStartChat={scrollToChat} />
 
         {/* Seção de Conversa com Bililiu */}
@@ -58,7 +58,7 @@ export default function App() {
         onClose={() => setIsPrivacyOpen(false)}
       />
 
-      {/* Rodapé */}
+      {/* Rodapé com Assinatura Frisquila */}
       <Footer
         onOpenPrivacy={() => setIsPrivacyOpen(true)}
         onScrollToTop={scrollToTop}

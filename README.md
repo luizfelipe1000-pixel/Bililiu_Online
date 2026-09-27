@@ -1,6 +1,8 @@
-# 🌾 Converse com Bililiu - Prosa Mineira com Inteligência Artificial
+# 🌾 Converse com Bililiu - O Agro do Futuro
 
-Uma aplicação web completa, moderna, responsiva e pronta para produção que coloca os visitantes para prosear diretamente com a inteligência artificial do **Bililiu**, influenciador digital agro direto do interior de Minas Gerais.
+Uma aplicação web completa, moderna, responsiva e pronta para produção que coloca os visitantes para prosear diretamente com o **Bililiu**, influenciador digital agro direto do interior de Minas Gerais.
+
+**Criado e desenvolvido por Frisquila.**
 
 ---
 
@@ -206,4 +208,4 @@ Todos os botões da página (Header, seção de redes, footer e cards) serão at
 ## 12. 📜 Licença e Créditos
 
 Desenvolvido para o influenciador agro **Bililiu Online** (Minas Gerais, Brasil).
-Prosa boa, café coado e inteligência artificial! ☕🌾
+**Criado e desenvolvido por Frisquila.** Prosa boa, café coado e resenha mineira! ☕🌾

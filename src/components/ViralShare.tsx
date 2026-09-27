@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Share2, Sparkles, MessageCircle, Quote, Check } from "lucide-react";
+import { Share2, Sparkles, MessageSquare, Quote, Check, Zap } from "lucide-react";
 import { shareBililiu } from "../utils/share.ts";
 
 interface ViralShareProps {
@@ -21,41 +21,41 @@ export const ViralShare: React.FC<ViralShareProps> = ({ onScrollToChat }) => {
     "Converse com o Bililiu e veja até onde essa prosa vai.",
     "Pergunta qualquer trem. Mas já aviso: o Bililiu pode responder 😂",
     "Esse trem aqui é melhor que ficar olhando o pasto crescer.",
-    "Você conversa com IA todo dia. Mas já tentou conversar com uma IA mineira?",
+    "A resenha mineira definitiva na roça mais moderna do Brasil.",
   ];
 
   return (
-    <section className="py-12 sm:py-16 bg-[#F4F1EA] border-b border-stone-300/80">
+    <section className="py-14 sm:py-20 bg-stone-950 border-t border-emerald-950/80">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-xs font-semibold mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-semibold mb-3">
+            <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
             Viralize essa resenha
           </div>
 
-          <h2 className="font-serif-brand text-2xl sm:text-4xl font-bold text-stone-900 tracking-tight mb-3">
+          <h2 className="font-brand text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-3">
             Prosa boa a gente não guarda sozinho
           </h2>
 
-          <p className="text-sm sm:text-base text-stone-600">
+          <p className="text-sm sm:text-base text-stone-300">
             Manda pro compadre, pra comadre e pro grupo da família pra ver quem aguenta o humor do homem!
           </p>
         </div>
 
-        {/* Grade de Frases Marcantes */}
+        {/* Grade de Frases */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
           {viralQuotes.map((quote, idx) => (
             <div
               key={idx}
-              className="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-2xs hover:shadow-sm transition-shadow flex items-start gap-3.5"
+              className="bg-stone-900/90 p-5 sm:p-6 rounded-3xl border border-emerald-950 hover:border-emerald-500/40 shadow-lg transition-all flex items-start gap-4"
             >
-              <Quote className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
+              <Quote className="w-6 h-6 text-amber-400 shrink-0 mt-1" />
               <div>
-                <p className="text-sm font-medium text-stone-800 leading-snug">
+                <p className="text-sm sm:text-base font-medium text-stone-200 leading-snug">
                   "{quote}"
                 </p>
-                <span className="text-[11px] text-stone-400 mt-1 block">
-                  — Sabedoria do Bililiu Online
+                <span className="text-[11px] text-emerald-400 mt-2 block font-brand">
+                  — Bililiu Online
                 </span>
               </div>
             </div>
@@ -63,29 +63,29 @@ export const ViralShare: React.FC<ViralShareProps> = ({ onScrollToChat }) => {
         </div>
 
         {/* Bloco de Ação Principal */}
-        <div className="bg-gradient-to-r from-emerald-850 to-emerald-950 text-white rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden shadow-lg border border-emerald-800">
+        <div className="bg-gradient-to-r from-emerald-950 via-stone-900 to-emerald-950 text-white rounded-3xl p-7 sm:p-10 text-center relative overflow-hidden shadow-2xl border border-emerald-500/40">
           <div className="max-w-xl mx-auto relative z-10">
-            <h3 className="font-serif-brand text-xl sm:text-2xl font-bold mb-2">
-              Você conversa com IA todo dia. Mas já tentou conversar com uma IA mineira?
+            <h3 className="font-brand text-2xl sm:text-3xl font-extrabold mb-3">
+              Você já viu de tudo na internet. Mas já proseou com o Bililiu?
             </h3>
-            <p className="text-xs sm:text-sm text-emerald-200 mb-6">
-              Chega de respostas sem sal de robô engravatado. Aqui a prosa é de verdade, sô!
+            <p className="text-xs sm:text-sm text-stone-300 mb-7">
+              Aqui a prosa é de verdade, cheia de sotaque, risadas e resenha mineira!
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
               <button
                 onClick={handleShare}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-sm rounded-xl shadow-md transition-all cursor-pointer active:scale-98"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-stone-950 font-extrabold text-sm rounded-2xl shadow-lg shadow-amber-950/50 transition-all cursor-pointer active:scale-98"
               >
-                {copied ? <Check className="w-4 h-4 text-emerald-800" /> : <Share2 className="w-4 h-4" />}
+                {copied ? <Check className="w-4 h-4 text-stone-950" /> : <Share2 className="w-4 h-4" />}
                 <span>{copied ? "Link Copiado pro Zap! 🚜" : "Compartilhar o Bililiu 🚜"}</span>
               </button>
 
               <button
                 onClick={onScrollToChat}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-700/80 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl border border-emerald-600/60 transition-colors cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-stone-900 hover:bg-stone-850 text-white font-bold text-sm rounded-2xl border border-emerald-500/40 transition-colors cursor-pointer"
               >
-                <MessageCircle className="w-4 h-4 text-amber-300" />
+                <MessageSquare className="w-4 h-4 text-emerald-400" />
                 <span>Prosear com o Bililiu</span>
               </button>
             </div>

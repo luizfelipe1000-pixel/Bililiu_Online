@@ -1,6 +1,6 @@
 {
   "name": "Converse com Bililiu",
-  "description": "Converse com o Bililiu, o influenciador mineiro do agro. Uma prosa diferente, cheia de humor, sotaque mineiro e inteligência artificial.",
+  "description": "Converse com o Bililiu, o influenciador mineiro do agro. Criado e desenvolvido por Frisquila.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
