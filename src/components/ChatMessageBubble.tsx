@@ -32,13 +32,13 @@ export const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
 
   return (
     <div
-      className={`flex items-end gap-2.5 my-3 ${
+      className={`flex items-end gap-3 my-3.5 ${
         isUser ? "justify-end" : "justify-start"
       } animate-bubble`}
     >
       {/* Caricatura do Bililiu para as mensagens dele */}
       {!isUser && (
-        <div className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-2xl overflow-hidden border border-emerald-500/50 shadow-md mb-1 bg-stone-900">
+        <div className="shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl overflow-hidden border-2 border-emerald-500/60 shadow-md mb-1 bg-stone-900">
           <img
             src={bililiuConfig.avatarUrl}
             onError={(e) => {
@@ -50,9 +50,9 @@ export const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
         </div>
       )}
 
-      {/* Balão de Mensagem Futurista */}
+      {/* Balão de Mensagem Futurista e Confortável */}
       <div
-        className={`relative max-w-[85%] sm:max-w-[75%] rounded-3xl p-4 sm:p-4.5 text-sm leading-relaxed shadow-lg transition-all ${
+        className={`relative max-w-[90%] sm:max-w-[80%] rounded-3xl p-4 sm:p-5 text-sm sm:text-base leading-relaxed shadow-lg transition-all ${
           isUser
             ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-br-xs shadow-emerald-950/40"
             : message.isError
@@ -62,10 +62,10 @@ export const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
       >
         {/* Identificação de quem está falando */}
         {!isUser && (
-          <div className="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-stone-800">
-            <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5 font-brand">
+          <div className="flex items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-stone-800">
+            <span className="text-xs sm:text-sm font-bold text-emerald-400 flex items-center gap-1.5 font-brand">
               Bililiu
-              <span className="text-[10px] bg-emerald-950 px-1.5 py-0.5 rounded text-amber-300 border border-emerald-800">
+              <span className="text-[10px] bg-emerald-950 px-2 py-0.5 rounded text-amber-300 border border-emerald-800">
                 🤠 Roça Online
               </span>
             </span>
@@ -78,7 +78,7 @@ export const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
                   title="Ouvir resposta com sotaque"
                   className="p-1 hover:text-emerald-400 transition-colors cursor-pointer rounded-lg hover:bg-stone-800"
                 >
-                  <Volume2 className="w-3.5 h-3.5" />
+                  <Volume2 className="w-4 h-4" />
                 </button>
               )}
               <button
@@ -86,14 +86,14 @@ export const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
                 title="Copiar mensagem"
                 className="p-1 hover:text-stone-200 transition-colors cursor-pointer rounded-lg hover:bg-stone-800"
               >
-                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
               </button>
             </div>
           </div>
         )}
 
-        {/* Conteúdo textual da mensagem */}
-        <div className="whitespace-pre-wrap break-words font-normal tracking-wide">
+        {/* Conteúdo textual da mensagem com tipografia mais legível */}
+        <div className="whitespace-pre-wrap break-words font-normal tracking-wide text-stone-100">
           {message.text}
         </div>
 
@@ -101,12 +101,12 @@ export const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
         {message.isError && onRetry && (
           <div className="mt-3 pt-2.5 border-t border-amber-900/60 flex items-center justify-between">
             <span className="text-xs text-amber-400 flex items-center gap-1">
-              <AlertCircle className="w-3.5 h-3.5" />
+              <AlertCircle className="w-4 h-4" />
               Sinal da roça oscilou
             </span>
             <button
               onClick={onRetry}
-              className="text-xs font-bold px-2.5 py-1 bg-amber-400 hover:bg-amber-300 text-stone-950 rounded-lg transition-colors cursor-pointer"
+              className="text-xs font-bold px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-stone-950 rounded-lg transition-colors cursor-pointer"
             >
               Mandar de novo ↻
             </button>
@@ -115,7 +115,7 @@ export const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
 
         {/* Rodapé com horário de envio */}
         <div
-          className={`flex items-center justify-end gap-1 mt-1.5 text-[10px] ${
+          className={`flex items-center justify-end gap-1 mt-2 text-[11px] ${
             isUser ? "text-emerald-200" : "text-stone-500"
           }`}
         >
