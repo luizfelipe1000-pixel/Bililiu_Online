@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://conversecombililiu.com.br/sitemap.xml
