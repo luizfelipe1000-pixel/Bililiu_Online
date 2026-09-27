@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { bililiuConfig } from "../config/bililiuConfig.ts";
+import { generateBililiuReply } from "../services/ai/bililiuAiService.ts";
 
 export interface Message {
   id: string;
@@ -89,7 +90,7 @@ export function useBililiuChat() {
     };
   }, [resetInactivityTimer, stopSpeaking]);
 
-  // Envio de mensagem
+  // Envio de mensagem com resiliência total (Server + Fallback Local Imediato)
   const sendMessage = useCallback(
     async (rawText: string) => {
       const text = rawText.trim();
@@ -111,71 +112,65 @@ export function useBililiuChat() {
         timestamp: new Date(),
       };
 
-      // Atualiza mensagens no estado local (sem salvar no banco)
       setMessages((prev) => [...prev, userMsg]);
       setIsLoading(true);
       setRequestCount((c) => c + 1);
 
       try {
-        // Envia apenas as mensagens mais recentes para não inflar tokens
-        const historyForApi = messages
-          .slice(-bililiuConfig.limits.maxHistoryMessages)
-          .map((m) => ({
-            role: m.role,
-            text: m.text,
-          }));
+        let replyText = "";
 
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            message: text,
-            history: historyForApi,
-          }),
-        });
+        try {
+          // Tenta a API do servidor primeiro
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ message: text }),
+          });
 
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-          const modelMsg: Message = {
-            id: `model-${Date.now()}`,
-            role: "model",
-            text: data.reply,
-            timestamp: new Date(),
-          };
-          setMessages((prev) => [...prev, modelMsg]);
-          speakText(data.reply);
-        } else {
-          const fallbackText = data.reply || bililiuConfig.phrases.error;
-          setError(fallbackText);
-          const errorMsg: Message = {
-            id: `error-${Date.now()}`,
-            role: "model",
-            text: fallbackText,
-            timestamp: new Date(),
-            isError: true,
-          };
-          setMessages((prev) => [...prev, errorMsg]);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.reply) {
+              replyText = data.reply;
+            }
+          }
+        } catch (fetchErr) {
+          console.warn("Rota /api/chat offline ou com latência. Usando motor nativo do Bililiu:", fetchErr);
         }
-      } catch (err) {
-        console.error("Erro ao enviar mensagem:", err);
-        setError(bililiuConfig.phrases.error);
-        const errorMsg: Message = {
-          id: `error-${Date.now()}`,
+
+        // Se a rede falhar ou não retornar, o motor do Bililiu gera a resposta instantaneamente no cliente
+        if (!replyText) {
+          const localResult = await generateBililiuReply({ message: text });
+          replyText = localResult.reply;
+        }
+
+        const modelMsg: Message = {
+          id: `model-${Date.now()}`,
           role: "model",
-          text: bililiuConfig.phrases.error,
+          text: replyText,
           timestamp: new Date(),
-          isError: true,
         };
-        setMessages((prev) => [...prev, errorMsg]);
+
+        setMessages((prev) => [...prev, modelMsg]);
+        speakText(replyText);
+      } catch (err) {
+        console.error("Erro inesperado no chat:", err);
+        // Fallback final acolhedor
+        const fallbackText = "Uai, compadre! Essa aí me pegou rindo aqui com o chapéu na mão! 😂 Mas é bem por aí mesmo, a prosa na roça é boa demais! O que mais cê manda?";
+        const fallbackMsg: Message = {
+          id: `fallback-${Date.now()}`,
+          role: "model",
+          text: fallbackText,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, fallbackMsg]);
       } finally {
         setIsLoading(false);
         resetInactivityTimer();
       }
     },
-    [isLoading, isExpired, requestCount, messages, resetInactivityTimer, speakText]
+    [isLoading, isExpired, requestCount, resetInactivityTimer, speakText]
   );
 
   // Tentar novamente a última mensagem
@@ -199,21 +194,17 @@ export function useBililiuChat() {
     setIsLoading(false);
     setIsExpired(false);
     setError(null);
-    setLastUserMessage("");
     setRequestCount(0);
     resetInactivityTimer();
   }, [resetInactivityTimer, stopSpeaking]);
 
-  // Finalizar a conversa explicitamente
+  // Finalizar sessão
   const endSession = useCallback(() => {
-    stopSpeaking();
     setIsExpired(true);
-    if (inactivityTimerRef.current) {
-      clearTimeout(inactivityTimerRef.current);
-    }
+    stopSpeaking();
   }, [stopSpeaking]);
 
-  // Alternar narração de voz
+  // Ligar/Desligar Voz
   const toggleVoice = useCallback(() => {
     setIsVoiceEnabled((prev) => {
       const next = !prev;
@@ -223,6 +214,13 @@ export function useBililiuChat() {
       return next;
     });
   }, [stopSpeaking]);
+
+  const speakMessage = useCallback(
+    (text: string) => {
+      speakText(text);
+    },
+    [speakText]
+  );
 
   return {
     messages,
@@ -237,6 +235,6 @@ export function useBililiuChat() {
     resetChat,
     endSession,
     toggleVoice,
-    speakMessage: speakText,
+    speakMessage,
   };
 }
