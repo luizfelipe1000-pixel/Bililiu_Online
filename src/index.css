@@ -7,14 +7,31 @@
     --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
 
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
   body {
     font-family: var(--font-body);
     background-color: #080d0a;
     color: #f3f4f6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Alta fidelidade de renderização gráfica em telas Retina / 4K / Mobile */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
   }
 
   h1, h2, h3, .font-brand {
     font-family: var(--font-heading);
+    letter-spacing: -0.02em;
   }
 
   .font-cyber {
@@ -24,7 +41,7 @@
 
 /* Custom cyber-agro scrollbar */
 .chat-scrollbar::-webkit-scrollbar {
-  width: 5px;
+  width: 6px;
 }
 .chat-scrollbar::-webkit-scrollbar-track {
   background: rgba(16, 185, 129, 0.05);
@@ -47,18 +64,18 @@
 }
 
 .text-glow-emerald {
-  text-shadow: 0 0 20px rgba(52, 211, 153, 0.5);
+  text-shadow: 0 0 24px rgba(52, 211, 153, 0.55);
 }
 
 .border-cyber-gradient {
   border-image: linear-gradient(to bottom right, #10b981, #f59e0b, #059669) 1;
 }
 
-/* Subtle speech bubble bounce */
+/* Suavização de bolha de conversa */
 @keyframes bubble-in {
   0% {
     opacity: 0;
-    transform: translateY(10px) scale(0.97);
+    transform: translateY(8px) scale(0.98);
   }
   100% {
     opacity: 1;
@@ -67,7 +84,7 @@
 }
 
 .animate-bubble {
-  animation: bubble-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: bubble-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Pulsing radar indicator */
@@ -77,8 +94,8 @@
     opacity: 1;
   }
   50% {
-    transform: scale(1.25);
-    opacity: 0.6;
+    transform: scale(1.2);
+    opacity: 0.55;
   }
 }
 
@@ -90,6 +107,6 @@
 .bg-cyber-grid {
   background-size: 40px 40px;
   background-image: 
-    linear-gradient(to right, rgba(16, 185, 129, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(16, 185, 129, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 185, 129, 0.04) 1px, transparent 1px);
 }

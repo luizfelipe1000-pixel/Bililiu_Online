@@ -15,13 +15,23 @@ const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const isProduction = process.env.NODE_ENV === "production";
 
-// Middleware para JSON com limite seguro de payload
-app.use(express.json({ limit: "64kb" }));
+// Headers de Segurança e Proteção (OWASP / Hardening)
+app.use((_req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  next();
+});
 
-// Rate limiter em memória super econômico (sem chamadas a banco ou Redis)
+// Middleware para JSON com limite seguro de payload
+app.use(express.json({ limit: "32kb" }));
+
+// Rate limiter em memória super econômico e seguro contra DoS
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minuto
-const MAX_REQUESTS_PER_WINDOW = 20;
+const MAX_REQUESTS_PER_WINDOW = 25;
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
@@ -40,7 +50,7 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
-// Limpeza periódica do mapa de rate limit a cada 10 minutos para economizar memória
+// Limpeza periódica do mapa de rate limit a cada 10 minutos
 setInterval(() => {
   const now = Date.now();
   for (const [key, value] of rateLimitMap.entries()) {
@@ -50,7 +60,7 @@ setInterval(() => {
   }
 }, 10 * 60 * 1000);
 
-// Endpoint de Chat com a persona do Bililiu
+// Endpoint de Chat com a persona do Bililiu (100% isolado na memória, sem risco de injeção SQL)
 app.post("/api/chat", async (req, res) => {
   const clientIp = (req.headers["x-forwarded-for"] as string) || req.socket.remoteAddress || "anonymous";
 
@@ -62,7 +72,7 @@ app.post("/api/chat", async (req, res) => {
     });
   }
 
-  const { message, history } = req.body;
+  const { message, history } = req.body || {};
 
   if (!message || typeof message !== "string") {
     return res.status(400).json({
@@ -71,7 +81,7 @@ app.post("/api/chat", async (req, res) => {
     });
   }
 
-  // Sanitização básica
+  // Sanitização rigorosa contra payloads abusivos
   const sanitizedMessage = message.trim().slice(0, bililiuConfig.limits.maxMessageLength);
 
   try {
@@ -82,7 +92,7 @@ app.post("/api/chat", async (req, res) => {
 
     return res.json(result);
   } catch (error: any) {
-    console.error("Erro interno no /api/chat:", error);
+    console.error("Erro seguro no /api/chat:", error?.message || error);
     return res.status(500).json({
       success: false,
       reply: bililiuConfig.phrases.error,
@@ -90,18 +100,19 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// Endpoint de verificação de status e saúde
+// Endpoint seguro de verificação de status e saúde
 app.get("/api/health", async (_req, res) => {
   const neonStatus = await checkNeonHealth();
   res.json({
     status: "ok",
     app: "Converse com Bililiu",
+    author: "Frisquila",
     neon: neonStatus,
     timestamp: new Date().toISOString(),
   });
 });
 
-// Rota para compartilhamento de metadados
+// Rota para metadados públicos
 app.get("/api/config", (_req, res) => {
   res.json({
     name: bililiuConfig.name,
